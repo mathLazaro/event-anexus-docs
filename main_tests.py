@@ -1,7 +1,7 @@
 import time
 from playwright.sync_api import sync_playwright
 from tests.login_test import (
-    esqueci_senha,
+    edit_user,
     fail_login,
     cadastro,
     login,
@@ -23,39 +23,64 @@ def main():
 
     # Dados de teste
 
-    email_organizador = "email3@teste.com"
+    email_organizador = "email_org_6@teste.com"
     senha_organizador = "senhaDeTeste@123"
 
-    email_participante = "email@teste.com"
+    email_participante = "email_part_6@teste.com"
     senha_participante = "senhaDeTeste@123"
 
-    titulo_evento = "Titulo do Evento de Teste"
-    titulo_evento_2 = "Titulo Evento de Teste 2"
+    titulo_evento = "Titulo do Evento de Teste 1"
+    titulo_evento_2 = "Titulo do Evento de Teste 2"
 
     # Testes
-    fail_login(page)
+    fail_login(page, screenshot_prefix="1.")
 
-    cadastro(email_organizador, senha_organizador, page, organizador=True)
+    # RFS01 - Cadastro de Usuário
+    cadastro(
+        email_organizador,
+        senha_organizador,
+        page,
+        organizador=True,
+        screenshot_prefix="2.",
+    )
 
-    # esqueci_senha(email_organizador, senha_organizador, page)
+    # RFS12 - Login Usuário
+    login(email_organizador, senha_organizador, page, screenshot_prefix="3.")
 
-    login(email_organizador, senha_organizador, page)
+    # RFS02 - Editar Usuário
+    edit_user(
+        page,
+        name="Organizador de Teste Editado",
+        tel="11999998888",
+        Departamento="Eventos",
+        screenshot_prefix="4.",
+    )
 
-    cadastro_evento(titulo_evento, page)
+    # RFS04 - Cadastro de Evento
+    cadastro_evento(titulo_evento, page, screenshot_prefix="5.")
 
-    editar_evento(titulo_evento, page)
+    # RFS05 - Edição de Evento
+    editar_evento(titulo_evento, page, screenshot_prefix="6.")
 
-    cadastro_evento(titulo_evento_2, page)
+    # RFS06 - Exclusão de Evento
+    cadastro_evento(titulo_evento_2, page, screenshot_prefix="7.")
 
-    excluir_evento(titulo_evento_2, page)
+    excluir_evento(titulo_evento_2, page, screenshot_prefix="8.")
 
-    cadastro(email_participante, senha_participante, page)
+    # RFS01 - Cadastro de Usuário Participante
+    cadastro(email_participante, senha_participante, page, screenshot_prefix="9.")
 
-    login(email_participante, senha_participante, page)
+    # RFS12 - Login Usuário
+    login(email_participante, senha_participante, page, screenshot_prefix="10.")
 
-    inscrever_evento(titulo_evento, page)
+    # RFS08 e RFS09 - Visualizar e Inscrever em Evento
+    inscrever_evento(titulo_evento, page, screenshot_prefix="11.")
 
-    cancelar_inscricao_evento(titulo_evento, page)
+    # RFS10 - Cancelar Inscrição em Evento
+    cancelar_inscricao_evento(titulo_evento, page, screenshot_prefix="12.")
+
+    # RFS03 - Excluir Usuário
+    edit_user(excluir=True, page=page, screenshot_prefix="13.")
 
     browser.close()
 
